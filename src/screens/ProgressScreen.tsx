@@ -21,8 +21,26 @@ import {
   borderRadius,
   layout,
 } from '../styles/constants';
+import { speechAssessmentEngine, overallAnalytics, ClinicalReport } from '../utils/speechAssessment';
+import { LineChart } from '../components/AnalyticsCharts';
 
 export default function ProgressScreen({ navigation }: NavigationProps) {
+  const [analytics, setAnalytics] = React.useState<overallAnalytics | null>(null);
+  const [report, setReport] = React.useState<ClinicalReport | null>(null);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    const data = await speechAssessmentEngine.getAnalytics();
+    const clinical = await speechAssessmentEngine.getClinicalReport();
+    setAnalytics(data);
+    setReport(clinical);
+    setLoading(false);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
@@ -35,15 +53,28 @@ export default function ProgressScreen({ navigation }: NavigationProps) {
           style={styles.header}
         >
           <View style={styles.headerContent}>
-            <TouchableOpacity
-              style={styles.backButton}
-              onPress={() => navigation.goBack()}
-            >
-              <Icon name="arrow-back" size={24} color="white" />
-            </TouchableOpacity>
+            {navigation.canGoBack() && (
+              <TouchableOpacity
+                style={styles.backButton}
+                onPress={() => navigation.goBack()}
+              >
+                <Icon name="arrow-back" size={24} color="white" />
+              </TouchableOpacity>
+            )}
             <View style={styles.headerText}>
               <Text style={styles.headerTitle}>Your Progress</Text>
-              <Text style={styles.headerSubtitle}>Keep up the great work!</Text>
+              <Text style={styles.headerSubtitle}>{analytics?.userStanding || 'Loading...'}</Text>
+
+              {/* Milestone Path */}
+              <View style={styles.milestonePathContainer}>
+                <View style={styles.milestoneInfo}>
+                  <Text style={styles.milestoneNext}>Next: {analytics?.nextStandingName}</Text>
+                  <Text style={styles.milestonePercent}>{analytics?.nextStandingProgress}%</Text>
+                </View>
+                <View style={styles.milestoneTrack}>
+                  <View style={[styles.milestoneFill, { width: `${analytics?.nextStandingProgress || 0}%` }]} />
+                </View>
+              </View>
             </View>
           </View>
         </LinearGradient>
@@ -53,64 +84,86 @@ export default function ProgressScreen({ navigation }: NavigationProps) {
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
+          {/* Trend Chart Section */}
+          <Card style={styles.chartCard}>
+            <View style={styles.cardHeaderRow}>
+              <Text style={styles.cardTitle}>Improvement Trend</Text>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('ClinicalReport')}
+                style={styles.clinicalLink}
+              >
+                <Text style={styles.clinicalLinkText}>Clinical View</Text>
+                <Icon name="chevron-forward" size={12} color={colors.primary} />
+              </TouchableOpacity>
+            </View>
+            <LineChart data={report?.improvementTrend || []} color={colors.primary} />
+            <Text style={styles.chartLegend}>Score improvement over last 10 attempts</Text>
+          </Card>
+
           {/* Overall Progress */}
           <Card style={styles.progressCard}>
-            <Text style={styles.cardTitle}>Overall Progress</Text>
-            <View style={styles.progressItem}>
-              <Text style={styles.progressLabel}>Animals</Text>
-              <Progress value={85} />
-              <Text style={styles.progressPercent}>85%</Text>
-            </View>
-            <View style={styles.progressItem}>
-              <Text style={styles.progressLabel}>Fruits</Text>
-              <Progress value={70} />
-              <Text style={styles.progressPercent}>70%</Text>
-            </View>
-            <View style={styles.progressItem}>
-              <Text style={styles.progressLabel}>Objects</Text>
-              <Progress value={45} />
-              <Text style={styles.progressPercent}>45%</Text>
-            </View>
+            <Text style={styles.cardTitle}>Category Progress</Text>
+            {analytics?.categories.map((cat) => (
+              <View key={cat.id} style={styles.progressItem}>
+                <Text style={styles.progressLabel}>{cat.name}</Text>
+                <Progress value={cat.percentage} />
+                <Text style={styles.progressPercent}>{cat.percentage}%</Text>
+              </View>
+            ))}
+            {(!analytics || analytics.categories.length === 0) && (
+              <Text style={styles.emptyNote}>Start learning to see your progress!</Text>
+            )}
           </Card>
 
-          {/* Achievements */}
+          {/* Achievements - Real Badges */}
           <Card style={styles.achievementsCard}>
-            <Text style={styles.cardTitle}>Achievements</Text>
+            <Text style={styles.cardTitle}>Real-time Achievements</Text>
             <View style={styles.badgeGrid}>
-              <Badge variant="gradient" gradient={[...colors.gradients.blue]}>
-                🦁 Animal Master
-              </Badge>
-              <Badge variant="gradient" gradient={[...colors.gradients.green]}>
-                🍎 Fruit Expert
-              </Badge>
-              <Badge variant="gradient" gradient={[...colors.gradients.orange]}>
-                ⭐ 7-Day Streak
-              </Badge>
-              <Badge variant="gradient" gradient={[...colors.gradients.purple]}>
-                🎯 Perfect Score
-              </Badge>
+              {analytics?.badges.map((badgeId, idx) => (
+                <Badge
+                  key={idx}
+                  variant="gradient"
+                  gradient={badgeId.includes('hard') ? [...colors.gradients.orange] : badgeId.includes('medium') ? [...colors.gradients.purple] : [...colors.gradients.green]}
+                >
+                  🏆 {badgeId.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                </Badge>
+              ))}
+              {(!analytics || analytics.badges.length === 0) && (
+                <Text style={styles.emptyNote}>Complete categories to earn badges!</Text>
+              )}
+
+              {/* Legacy/Milestone Badges */}
+              {analytics && analytics.totalStars >= 10 && (
+                <Badge variant="gradient" gradient={[...colors.gradients.blue]}>
+                  ⭐ Star Pupil
+                </Badge>
+              )}
             </View>
           </Card>
 
-          {/* Stats */}
+          {/* Statistics */}
           <Card style={styles.statsCard}>
-            <Text style={styles.cardTitle}>Statistics</Text>
+            <Text style={styles.cardTitle}>Learning Statistics</Text>
             <View style={styles.statGrid}>
               <View style={styles.statItem}>
-                <Text style={styles.statNumber}>127</Text>
-                <Text style={styles.statLabel}>Words Learned</Text>
+                <Text style={styles.statNumber}>{analytics?.totalLearned || 0}</Text>
+                <Text style={styles.statLabel}>Words Seen</Text>
               </View>
               <View style={styles.statItem}>
-                <Text style={styles.statNumber}>7</Text>
+                <Text style={styles.statNumber}>{analytics?.totalStars || 0}</Text>
+                <Text style={styles.statLabel}>Total Stars</Text>
+              </View>
+              <View style={styles.statItem}>
+                <Text style={styles.statNumber}>{analytics?.averageAccuracy || 0}%</Text>
+                <Text style={styles.statLabel}>Avg Accuracy</Text>
+              </View>
+              <View style={styles.statItem}>
+                <Text style={styles.statNumber}>{analytics?.streak || 0} 🔥</Text>
                 <Text style={styles.statLabel}>Day Streak</Text>
               </View>
               <View style={styles.statItem}>
-                <Text style={styles.statNumber}>95%</Text>
-                <Text style={styles.statLabel}>Accuracy</Text>
-              </View>
-              <View style={styles.statItem}>
-                <Text style={styles.statNumber}>42</Text>
-                <Text style={styles.statLabel}>Total Hours</Text>
+                <Text style={styles.statNumber}>{analytics?.totalAvailable || 0}</Text>
+                <Text style={styles.statLabel}>Total Curriculum</Text>
               </View>
             </View>
           </Card>
@@ -155,8 +208,43 @@ const styles = StyleSheet.create({
   },
   headerSubtitle: {
     fontSize: typography.fontSizes.sm,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: 'rgba(255, 255, 255, 0.95)',
+    fontWeight: '600',
     marginTop: 2,
+  },
+  milestonePathContainer: {
+    marginTop: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    padding: 8,
+    borderRadius: 8,
+  },
+  milestoneInfo: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 4,
+  },
+  milestoneNext: {
+    fontSize: 10,
+    color: 'rgba(255, 255, 255, 0.9)',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  milestonePercent: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  milestoneTrack: {
+    height: 6,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 3,
+    overflow: 'hidden',
+  },
+  milestoneFill: {
+    height: '100%',
+    backgroundColor: 'white',
+    borderRadius: 3,
   },
   scrollView: {
     flex: 1,
@@ -172,6 +260,37 @@ const styles = StyleSheet.create({
   achievementsCard: {
     marginBottom: layout.cardSpacing,
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
+  },
+  chartCard: {
+    padding: spacing.md,
+    marginBottom: spacing.md,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+  },
+  cardHeaderRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: spacing.sm,
+  },
+  clinicalLink: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#eff6ff',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  clinicalLinkText: {
+    fontSize: 11,
+    fontWeight: 'bold',
+    color: colors.primary,
+    marginRight: 2,
+  },
+  chartLegend: {
+    fontSize: 10,
+    color: colors.mutedForeground,
+    textAlign: 'center',
+    marginTop: -4,
   },
   statsCard: {
     backgroundColor: 'rgba(255, 255, 255, 0.9)',
@@ -224,5 +343,12 @@ const styles = StyleSheet.create({
     fontSize: typography.fontSizes.sm,
     color: colors.mutedForeground,
     textAlign: 'center',
+  },
+  emptyNote: {
+    fontSize: typography.fontSizes.sm,
+    color: colors.mutedForeground,
+    fontStyle: 'italic',
+    textAlign: 'center',
+    marginTop: spacing.md,
   },
 });

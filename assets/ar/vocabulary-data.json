@@ -4,7 +4,10 @@
       "id": "animals",
       "name": "Animals",
       "emoji": "🦁",
-      "color": ["#3b82f6", "#6366f1"],
+      "color": [
+        "#3b82f6",
+        "#6366f1"
+      ],
       "description": "Learn about different animals",
       "items": [
         {
@@ -13,12 +16,24 @@
           "emoji": "🦁",
           "pronunciation": "/ˈlaɪ.ən/",
           "phonetic": "LIE-uhn",
-          "modelPath": "models/animals/cartoon_lion.glb",
+          "modelPath": "models/animals/lion.glb",
           "soundPath": "sounds/lion.mp3",
           "textureColor": "#fbbf24",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            1.2,
+            1.2,
+            1.2
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "easy",
           "description": "A large wild cat that lives in Africa"
@@ -32,9 +47,21 @@
           "modelPath": "models/animals/cyberphant.glb",
           "soundPath": "sounds/Elephant.mp3",
           "textureColor": "#6b7280",
-          "scale": [0.3, 0.3, 0.3],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "medium",
           "description": "A very large animal with a long nose called a trunk"
@@ -48,9 +75,21 @@
           "modelPath": "models/animals/monkey.glb",
           "soundPath": "sounds/Monkey.mp3",
           "textureColor": "#8b5a3c",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "easy",
           "description": "A furry animal that climbs trees and eats bananas"
@@ -64,9 +103,21 @@
           "modelPath": "models/animals/cat.glb",
           "soundPath": "sounds/cat.mp3",
           "textureColor": "#f59e0b",
-          "scale": [0.5, 0.5, 0.5],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "easy",
           "description": "A small furry pet that says meow"
@@ -80,9 +131,21 @@
           "modelPath": "models/animals/dog.glb",
           "soundPath": "sounds/Dog.mp3",
           "textureColor": "#a855f7",
-          "scale": [0.5, 0.5, 0.5],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "easy",
           "description": "A friendly pet that barks and wags its tail"
@@ -96,9 +159,21 @@
           "modelPath": "models/animals/bear.glb",
           "soundPath": "sounds/bear.mp3",
           "textureColor": "#92400e",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            1,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "easy",
           "description": "A large furry animal that lives in forests"
@@ -112,9 +187,21 @@
           "modelPath": "models/animals/tiger.glb",
           "soundPath": "sounds/Tiger.mp3",
           "textureColor": "#f97316",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "medium",
           "description": "A large striped wild cat"
@@ -128,9 +215,21 @@
           "modelPath": "models/animals/zebra.glb",
           "soundPath": "sounds/Zebra.mp3",
           "textureColor": "#000000",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "medium",
           "description": "A striped horse-like animal from Africa"
@@ -144,9 +243,21 @@
           "modelPath": "models/animals/rabbit.glb",
           "soundPath": "sounds/Rabbit.mp3",
           "textureColor": "#fef3c7",
-          "scale": [0.5, 0.5, 0.5],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.2,
+            0.2,
+            0.2
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "easy",
           "description": "A small furry animal with long ears"
@@ -160,9 +271,21 @@
           "modelPath": "models/animals/turtle.glb",
           "soundPath": "sounds/Turtle.mp3",
           "textureColor": "#84cc16",
-          "scale": [0.5, 0.5, 0.5],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "medium",
           "description": "A slow-moving reptile with a hard shell"
@@ -176,9 +299,21 @@
           "modelPath": "models/animals/penguin.glb",
           "soundPath": "sounds/Penguin.mp3",
           "textureColor": "#000000",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "medium",
           "description": "A black and white bird that can't fly but swims"
@@ -192,9 +327,21 @@
           "modelPath": "models/animals/dolphin.glb",
           "soundPath": "sounds/Dolphin.mp3",
           "textureColor": "#0ea5e9",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "medium",
           "description": "A smart ocean animal that jumps and plays"
@@ -208,9 +355,21 @@
           "modelPath": "models/animals/shark.glb",
           "soundPath": "",
           "textureColor": "#475569",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "hard",
           "description": "A large ocean predator with sharp teeth"
@@ -224,9 +383,21 @@
           "modelPath": "models/animals/octopus.glb",
           "soundPath": "sounds/Octopus.mp3",
           "textureColor": "#a855f7",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "hard",
           "description": "A sea creature with eight tentacles"
@@ -240,9 +411,21 @@
           "modelPath": "models/animals/crab.glb",
           "soundPath": "sounds/crab.mp3",
           "textureColor": "#ef4444",
-          "scale": [0.5, 0.5, 0.5],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "medium",
           "description": "A sea animal with claws that walks sideways"
@@ -256,9 +439,21 @@
           "modelPath": "models/animals/nile_crocodile.glb",
           "soundPath": "sounds/crocodile.mp3",
           "textureColor": "#16a34a",
-          "scale": [0.3, 0.3, 0.3],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "hard",
           "description": "A large reptile with powerful jaws"
@@ -272,9 +467,21 @@
           "modelPath": "models/animals/owl.glb",
           "soundPath": "sounds/Owl.mp3",
           "textureColor": "#92400e",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "medium",
           "description": "A wise bird that hunts at night"
@@ -288,9 +495,21 @@
           "modelPath": "models/animals/eagle.glb",
           "soundPath": "sounds/Eagle.mp3",
           "textureColor": "#78350f",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "medium",
           "description": "A powerful bird with sharp vision"
@@ -304,9 +523,21 @@
           "modelPath": "models/animals/parrot.glb",
           "soundPath": "",
           "textureColor": "#10b981",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "medium",
           "description": "A colorful bird that can mimic sounds"
@@ -320,9 +551,21 @@
           "modelPath": "models/animals/peacock.glb",
           "soundPath": "",
           "textureColor": "#0ea5e9",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "hard",
           "description": "A beautiful bird with colorful tail feathers"
@@ -336,9 +579,21 @@
           "modelPath": "models/animals/hen.glb",
           "soundPath": "",
           "textureColor": "#fbbf24",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "easy",
           "description": "A female chicken that lays eggs"
@@ -352,9 +607,21 @@
           "modelPath": "models/animals/pig.glb",
           "soundPath": "",
           "textureColor": "#fca5a5",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "easy",
           "description": "A farm animal that says oink"
@@ -368,9 +635,21 @@
           "modelPath": "models/animals/horse.glb",
           "soundPath": "",
           "textureColor": "#78350f",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "medium",
           "description": "A large animal that people can ride"
@@ -384,9 +663,21 @@
           "modelPath": "models/animals/butterfly.glb",
           "soundPath": "sounds/butterfly.mp3",
           "textureColor": "#f472b6",
-          "scale": [0.3, 0.3, 0.3],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "medium",
           "description": "A beautiful insect with colorful wings"
@@ -400,9 +691,21 @@
           "modelPath": "models/animals/ant.glb",
           "soundPath": "",
           "textureColor": "#000000",
-          "scale": [0.6, 0.6, 0.6],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "easy",
           "description": "A tiny insect that works in colonies"
@@ -416,9 +719,21 @@
           "modelPath": "models/animals/grasshopper.glb",
           "soundPath": "",
           "textureColor": "#84cc16",
-          "scale": [0.5, 0.5, 0.5],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "hard",
           "description": "A jumping insect that lives in grass"
@@ -429,7 +744,10 @@
       "id": "foods",
       "name": "Foods",
       "emoji": "🍎",
-      "color": ["#10b981", "#06b6d4"],
+      "color": [
+        "#10b981",
+        "#06b6d4"
+      ],
       "description": "Learn about different foods",
       "items": [
         {
@@ -441,9 +759,21 @@
           "modelPath": "models/foods/red_apple.glb",
           "soundPath": "sounds/apple.mp3",
           "textureColor": "#ef4444",
-          "scale": [0.5, 0.5, 0.5],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "easy",
           "description": "A red or green fruit that grows on trees"
@@ -457,9 +787,21 @@
           "modelPath": "models/foods/banana.glb",
           "soundPath": "sounds/banana.mp3",
           "textureColor": "#fbbf24",
-          "scale": [0.5, 0.5, 0.5],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "medium",
           "description": "A yellow curved fruit that monkeys love"
@@ -473,9 +815,21 @@
           "modelPath": "models/foods/orange_fruit.glb",
           "soundPath": "sounds/Orange.mp3",
           "textureColor": "#f97316",
-          "scale": [0.5, 0.5, 0.5],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "medium",
           "description": "A round citrus fruit full of vitamin C"
@@ -486,12 +840,24 @@
           "emoji": "🍉",
           "pronunciation": "/ˈwɔː.tər.mel.ən/",
           "phonetic": "WAW-ter-mel-uhn",
-          "modelPath": "models/foods/watermelon__half.glb",
+          "modelPath": "models/foods/watermelon_half.glb",
           "soundPath": "sounds/Watermelon.mp3",
           "textureColor": "#22c55e",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "hard",
           "description": "A large sweet fruit with red flesh"
@@ -505,9 +871,21 @@
           "modelPath": "models/foods/pineapple.glb",
           "soundPath": "sounds/Pineapple.mp3",
           "textureColor": "#fbbf24",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "hard",
           "description": "A tropical fruit with spiky skin"
@@ -521,9 +899,21 @@
           "modelPath": "models/foods/carrot.glb",
           "soundPath": "sounds/carrot.mp3",
           "textureColor": "#f97316",
-          "scale": [0.5, 0.5, 0.5],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "medium",
           "description": "An orange vegetable that rabbits love"
@@ -537,9 +927,21 @@
           "modelPath": "models/foods/potato.glb",
           "soundPath": "sounds/Potato.mp3",
           "textureColor": "#92400e",
-          "scale": [0.5, 0.5, 0.5],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "medium",
           "description": "A brown vegetable that grows underground"
@@ -553,9 +955,21 @@
           "modelPath": "models/foods/burger.glb",
           "soundPath": "sounds/burger.mp3",
           "textureColor": "#78350f",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "easy",
           "description": "A sandwich with meat and vegetables"
@@ -569,9 +983,21 @@
           "modelPath": "models/foods/broccoli_pizza_scan.glb",
           "soundPath": "sounds/Pizza.mp3",
           "textureColor": "#fbbf24",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "easy",
           "description": "A round flat bread with cheese and toppings"
@@ -585,9 +1011,21 @@
           "modelPath": "models/foods/sandwich.glb",
           "soundPath": "sounds/Sandwich.mp3",
           "textureColor": "#fef3c7",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "medium",
           "description": "Food between two slices of bread"
@@ -601,9 +1039,21 @@
           "modelPath": "models/foods/noodles.glb",
           "soundPath": "sounds/Noodles.mp3",
           "textureColor": "#fbbf24",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "medium",
           "description": "Long thin strips of pasta"
@@ -617,9 +1067,21 @@
           "modelPath": "models/foods/cake.glb",
           "soundPath": "sounds/cake.mp3",
           "textureColor": "#fca5a5",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "easy",
           "description": "A sweet dessert for celebrations"
@@ -633,9 +1095,21 @@
           "modelPath": "models/foods/ice_cream.glb",
           "soundPath": "sounds/icecream.mp3",
           "textureColor": "#fef3c7",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "medium",
           "description": "A cold sweet frozen dessert"
@@ -649,9 +1123,21 @@
           "modelPath": "models/foods/chocolate_bar.glb",
           "soundPath": "sounds/chocolate.mp3",
           "textureColor": "#78350f",
-          "scale": [0.5, 0.5, 0.5],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "medium",
           "description": "A sweet brown candy"
@@ -665,9 +1151,21 @@
           "modelPath": "models/foods/lolly_pop.glb",
           "soundPath": "sounds/Lollypop.mp3",
           "textureColor": "#f472b6",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "medium",
           "description": "A sweet candy on a stick"
@@ -678,7 +1176,10 @@
       "id": "clothing",
       "name": "Clothing",
       "emoji": "👕",
-      "color": ["#ec4899", "#f97316"],
+      "color": [
+        "#ec4899",
+        "#f97316"
+      ],
       "description": "Learn about clothes we wear",
       "items": [
         {
@@ -690,9 +1191,21 @@
           "modelPath": "models/clothing/shirt_test_-_marvelous_designer.glb",
           "soundPath": "sounds/shirt.mp3",
           "textureColor": "#3b82f6",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "easy",
           "description": "A piece of clothing for the upper body"
@@ -706,9 +1219,21 @@
           "modelPath": "models/clothing/best_pants_for_boys.glb",
           "soundPath": "sounds/pants.mp3",
           "textureColor": "#1e40af",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "easy",
           "description": "Clothing worn on the legs"
@@ -722,9 +1247,21 @@
           "modelPath": "models/clothing/arnt_shoes_-_ulv_whussuphaterz.glb",
           "soundPath": "sounds/shoes.mp3",
           "textureColor": "#000000",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "easy",
           "description": "Something we wear on our feet"
@@ -738,9 +1275,21 @@
           "modelPath": "models/clothing/baseball_cap.glb",
           "soundPath": "sounds/cap.mp3",
           "textureColor": "#ef4444",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "easy",
           "description": "A hat with a visor"
@@ -754,9 +1303,21 @@
           "modelPath": "models/clothing/pro_weightlifting_glove.glb",
           "soundPath": "sounds/golves.mp3",
           "textureColor": "#000000",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "medium",
           "description": "Clothing worn on hands"
@@ -767,7 +1328,10 @@
       "id": "daily_objects",
       "name": "Daily Objects",
       "emoji": "🪑",
-      "color": ["#78350f", "#92400e"],
+      "color": [
+        "#78350f",
+        "#92400e"
+      ],
       "description": "Learn about everyday objects",
       "items": [
         {
@@ -779,9 +1343,21 @@
           "modelPath": "models/daily-essential object/chair__wooden_chair.glb",
           "soundPath": "sounds/chair.mp3",
           "textureColor": "#78350f",
-          "scale": [0.3, 0.3, 0.3],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "easy",
           "description": "Furniture to sit on"
@@ -795,9 +1371,21 @@
           "modelPath": "models/daily-essential object/wood_table.glb",
           "soundPath": "sounds/table.mp3",
           "textureColor": "#92400e",
-          "scale": [0.3, 0.3, 0.3],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "easy",
           "description": "Flat surface for eating or working"
@@ -811,9 +1399,21 @@
           "modelPath": "models/daily-essential object/old_bed.glb",
           "soundPath": "sounds/bed.mp3",
           "textureColor": "#fef3c7",
-          "scale": [0.3, 0.3, 0.3],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "easy",
           "description": "Furniture for sleeping"
@@ -827,9 +1427,21 @@
           "modelPath": "models/daily-essential object/cup_of_coffee.glb",
           "soundPath": "sounds/cup.mp3",
           "textureColor": "#ffffff",
-          "scale": [0.5, 0.5, 0.5],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "easy",
           "description": "A container for drinking"
@@ -843,9 +1455,21 @@
           "modelPath": "models/daily-essential object/plate.glb",
           "soundPath": "sounds/plate.mp3",
           "textureColor": "#ffffff",
-          "scale": [0.5, 0.5, 0.5],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "easy",
           "description": "A flat dish for food"
@@ -859,9 +1483,21 @@
           "modelPath": "models/daily-essential object/spoon.glb",
           "soundPath": "sounds/spoon.mp3",
           "textureColor": "#94a3b8",
-          "scale": [0.5, 0.5, 0.5],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "easy",
           "description": "A utensil for eating"
@@ -872,7 +1508,10 @@
       "id": "toys",
       "name": "Toys & Play",
       "emoji": "🧸",
-      "color": ["#f59e0b", "#f97316"],
+      "color": [
+        "#f59e0b",
+        "#f97316"
+      ],
       "description": "Learn about fun toys",
       "items": [
         {
@@ -884,9 +1523,21 @@
           "modelPath": "models/toys_play/teddy_bear.glb",
           "soundPath": "sounds/teady_bear.mp3",
           "textureColor": "#92400e",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "medium",
           "description": "A soft stuffed toy bear"
@@ -900,9 +1551,21 @@
           "modelPath": "models/toys_play/stylized_car.glb",
           "soundPath": "sounds/car.mp3",
           "textureColor": "#ef4444",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "easy",
           "description": "A toy vehicle with wheels"
@@ -916,9 +1579,21 @@
           "modelPath": "models/toys_play/bicycle.glb",
           "soundPath": "sounds/bicycle.mp3",
           "textureColor": "#3b82f6",
-          "scale": [0.3, 0.3, 0.3],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "hard",
           "description": "A two-wheeled vehicle you pedal"
@@ -932,9 +1607,21 @@
           "modelPath": "models/toys_play/scooter.glb",
           "soundPath": "sounds/scooter.mp3",
           "textureColor": "#10b981",
-          "scale": [0.3, 0.3, 0.3],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "medium",
           "description": "A toy with wheels and a handlebar"
@@ -948,9 +1635,21 @@
           "modelPath": "models/toys_play/industrial_train.glb",
           "soundPath": "sounds/train.mp3",
           "textureColor": "#ef4444",
-          "scale": [0.3, 0.3, 0.3],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "medium",
           "description": "A toy that runs on tracks"
@@ -964,9 +1663,21 @@
           "modelPath": "models/toys_play/tennis_ball.glb",
           "soundPath": "sounds/ball.mp3",
           "textureColor": "#fbbf24",
-          "scale": [0.5, 0.5, 0.5],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "easy",
           "description": "A round toy you can throw or kick"
@@ -980,9 +1691,21 @@
           "modelPath": "models/toys_play/rolling_dice.glb",
           "soundPath": "sounds/dice.mp3",
           "textureColor": "#ffffff",
-          "scale": [0.5, 0.5, 0.5],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "medium",
           "description": "Small cubes used in games"
@@ -996,9 +1719,21 @@
           "modelPath": "models/toys_play/chess_board.glb",
           "soundPath": "sounds/chess.mp3",
           "textureColor": "#000000",
-          "scale": [0.3, 0.3, 0.3],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "hard",
           "description": "A strategy board game"
@@ -1012,9 +1747,21 @@
           "modelPath": "models/toys_play/boardgames.glb",
           "soundPath": "sounds/board_game.mp3",
           "textureColor": "#fbbf24",
-          "scale": [0.3, 0.3, 0.3],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "hard",
           "description": "Games played on a board"
@@ -1028,9 +1775,21 @@
           "modelPath": "models/toys_play/cricket_bat.glb",
           "soundPath": "sounds/cricket_bat.mp3",
           "textureColor": "#92400e",
-          "scale": [0.3, 0.3, 0.3],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "medium",
           "description": "A wooden bat for cricket"
@@ -1044,9 +1803,21 @@
           "modelPath": "models/toys_play/dianasaur.glb",
           "soundPath": "sounds/dainasour.mp3",
           "textureColor": "#16a34a",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "hard",
           "description": "A toy of an ancient reptile"
@@ -1060,9 +1831,21 @@
           "modelPath": "models/toys_play/star-lord_action_figure.glb",
           "soundPath": "sounds/action_figure.mp3",
           "textureColor": "#3b82f6",
-          "scale": [0.4, 0.4, 0.4],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "hard",
           "description": "A toy superhero or character"
@@ -1076,12 +1859,412 @@
           "modelPath": "models/toys_play/park.glb",
           "soundPath": "sounds/park.mp3",
           "textureColor": "#16a34a",
-          "scale": [0.3, 0.3, 0.3],
-          "position": [0, 0, 0],
-          "rotation": [0, 0, 0],
+          "scale": [
+            0.3,
+            0.3,
+            0.3
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
           "animations": [],
           "difficulty": "easy",
           "description": "A place to play outdoors"
+        }
+      ]
+    },
+    {
+      "id": "alphabets",
+      "name": "Alphabets",
+      "emoji": "🔤",
+      "color": [
+        "#f59e0b",
+        "#d97706"
+      ],
+      "description": "Learn the alphabet A to G",
+      "items": [
+        {
+          "id": "char_a",
+          "word": "A",
+          "emoji": "🅰️",
+          "pronunciation": "/eɪ/",
+          "phonetic": "AY",
+          "modelPath": "internal:cube",
+          "soundPath": "",
+          "textureColor": "#ef4444",
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "animations": [],
+          "difficulty": "easy",
+          "description": "The first letter of the alphabet"
+        },
+        {
+          "id": "char_b",
+          "word": "B",
+          "emoji": "🅱️",
+          "pronunciation": "/biː/",
+          "phonetic": "BEE",
+          "modelPath": "internal:cube",
+          "soundPath": "",
+          "textureColor": "#3b82f6",
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "animations": [],
+          "difficulty": "easy",
+          "description": "The second letter of the alphabet"
+        },
+        {
+          "id": "char_c",
+          "word": "C",
+          "emoji": "©️",
+          "pronunciation": "/siː/",
+          "phonetic": "SEE",
+          "modelPath": "internal:cube",
+          "soundPath": "",
+          "textureColor": "#10b981",
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "animations": [],
+          "difficulty": "easy",
+          "description": "The third letter of the alphabet"
+        },
+        {
+          "id": "char_d",
+          "word": "D",
+          "emoji": "🇩",
+          "pronunciation": "/diː/",
+          "phonetic": "DEE",
+          "modelPath": "internal:cube",
+          "soundPath": "",
+          "textureColor": "#f97316",
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "animations": [],
+          "difficulty": "easy",
+          "description": "The fourth letter of the alphabet"
+        },
+        {
+          "id": "char_e",
+          "word": "E",
+          "emoji": "🇪",
+          "pronunciation": "/iː/",
+          "phonetic": "EE",
+          "modelPath": "internal:cube",
+          "soundPath": "",
+          "textureColor": "#8b5cf6",
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "animations": [],
+          "difficulty": "easy",
+          "description": "The fifth letter of the alphabet"
+        },
+        {
+          "id": "char_f",
+          "word": "F",
+          "emoji": "🇫",
+          "pronunciation": "/ef/",
+          "phonetic": "EF",
+          "modelPath": "internal:cube",
+          "soundPath": "",
+          "textureColor": "#ec4899",
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "animations": [],
+          "difficulty": "easy",
+          "description": "The sixth letter of the alphabet"
+        },
+        {
+          "id": "char_g",
+          "word": "G",
+          "emoji": "🇬",
+          "pronunciation": "/dʒiː/",
+          "phonetic": "GEE",
+          "modelPath": "internal:cube",
+          "soundPath": "",
+          "textureColor": "#06b6d4",
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "animations": [],
+          "difficulty": "easy",
+          "description": "The seventh letter of the alphabet"
+        }
+      ]
+    },
+    {
+      "id": "numbers",
+      "name": "Numbers",
+      "emoji": "🔢",
+      "color": [
+        "#6366f1",
+        "#4f46e5"
+      ],
+      "description": "Learn numbers 1 to 6",
+      "items": [
+        {
+          "id": "num_1",
+          "word": "One",
+          "emoji": "1️⃣",
+          "pronunciation": "/wʌn/",
+          "phonetic": "WUN",
+          "modelPath": "internal:cube",
+          "soundPath": "",
+          "textureColor": "#ef4444",
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "animations": [],
+          "difficulty": "easy",
+          "description": "The number one"
+        },
+        {
+          "id": "num_2",
+          "word": "Two",
+          "emoji": "2️⃣",
+          "pronunciation": "/tuː/",
+          "phonetic": "TOO",
+          "modelPath": "internal:cube",
+          "soundPath": "",
+          "textureColor": "#3b82f6",
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "animations": [],
+          "difficulty": "easy",
+          "description": "The number two"
+        },
+        {
+          "id": "num_3",
+          "word": "Three",
+          "emoji": "3️⃣",
+          "pronunciation": "/θriː/",
+          "phonetic": "THREE",
+          "modelPath": "internal:cube",
+          "soundPath": "",
+          "textureColor": "#10b981",
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "animations": [],
+          "difficulty": "easy",
+          "description": "The number three"
+        },
+        {
+          "id": "num_4",
+          "word": "Four",
+          "emoji": "4️⃣",
+          "pronunciation": "/fɔːr/",
+          "phonetic": "FOR",
+          "modelPath": "internal:cube",
+          "soundPath": "",
+          "textureColor": "#f97316",
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "animations": [],
+          "difficulty": "easy",
+          "description": "The number four"
+        },
+        {
+          "id": "num_5",
+          "word": "Five",
+          "emoji": "5️⃣",
+          "pronunciation": "/faɪv/",
+          "phonetic": "FYVE",
+          "modelPath": "internal:cube",
+          "soundPath": "",
+          "textureColor": "#8b5cf6",
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "animations": [],
+          "difficulty": "easy",
+          "description": "The number five"
+        },
+        {
+          "id": "num_6",
+          "word": "Six",
+          "emoji": "6️⃣",
+          "pronunciation": "/sɪks/",
+          "phonetic": "SIKS",
+          "modelPath": "internal:cube",
+          "soundPath": "",
+          "textureColor": "#ec4899",
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "animations": [],
+          "difficulty": "easy",
+          "description": "The number six"
         }
       ]
     }
@@ -1099,8 +2282,16 @@
       "volume": 0.8
     },
     "modelSettings": {
-      "defaultScale": [0.4, 0.4, 0.4],
-      "defaultPosition": [0, 0, 0],
+      "defaultScale": [
+        0.4,
+        0.4,
+        0.4
+      ],
+      "defaultPosition": [
+        0,
+        0,
+        0
+      ],
       "autoRotate": false,
       "shadowEnabled": true
     }

@@ -37,12 +37,14 @@ export default function SettingsScreen({ navigation }: NavigationProps) {
           style={styles.header}
         >
           <View style={styles.headerContent}>
-            <TouchableOpacity
-              style={styles.backButton}
-              onPress={() => navigation.goBack()}
-            >
-              <Icon name="arrow-back" size={24} color="white" />
-            </TouchableOpacity>
+            {navigation?.canGoBack() && (
+              <TouchableOpacity
+                style={styles.backButton}
+                onPress={() => navigation.goBack()}
+              >
+                <Icon name="arrow-back" size={24} color="white" />
+              </TouchableOpacity>
+            )}
             <View style={styles.headerText}>
               <Text style={styles.headerTitle}>Settings</Text>
               <Text style={styles.headerSubtitle}>Customize your experience</Text>
@@ -58,7 +60,7 @@ export default function SettingsScreen({ navigation }: NavigationProps) {
           {/* Audio Settings */}
           <Card style={styles.settingsCard}>
             <Text style={styles.cardTitle}>Audio & Haptics</Text>
-            
+
             <View style={styles.settingItem}>
               <View style={styles.settingInfo}>
                 <Icon name="volume-high" size={20} color={colors.primary} />
@@ -87,7 +89,7 @@ export default function SettingsScreen({ navigation }: NavigationProps) {
           {/* Notification Settings */}
           <Card style={styles.settingsCard}>
             <Text style={styles.cardTitle}>Notifications</Text>
-            
+
             <View style={styles.settingItem}>
               <View style={styles.settingInfo}>
                 <Icon name="notifications" size={20} color={colors.primary} />
@@ -104,7 +106,7 @@ export default function SettingsScreen({ navigation }: NavigationProps) {
           {/* Account Settings */}
           <Card style={styles.settingsCard}>
             <Text style={styles.cardTitle}>Account</Text>
-            
+
             <TouchableOpacity style={styles.settingItem}>
               <View style={styles.settingInfo}>
                 <Icon name="person" size={20} color={colors.primary} />
@@ -125,7 +127,7 @@ export default function SettingsScreen({ navigation }: NavigationProps) {
           {/* About */}
           <Card style={styles.settingsCard}>
             <Text style={styles.cardTitle}>About</Text>
-            
+
             <TouchableOpacity style={styles.settingItem}>
               <View style={styles.settingInfo}>
                 <Icon name="information-circle" size={20} color={colors.primary} />

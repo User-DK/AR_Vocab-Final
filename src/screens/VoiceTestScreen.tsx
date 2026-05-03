@@ -11,7 +11,7 @@ import {
   NativeModules,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Voice from '@react-native-voice/voice';
+import Voice from '@dev-amirzubair/react-native-voice';
 import Icon from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -27,7 +27,7 @@ export default function VoiceTestScreen({ navigation }: any) {
     // Audit what native modules we actually have
     const modules = Object.keys(NativeModules).sort();
     setNativeModulesList(modules);
-    
+
     // Check if 'Voice' or 'RCTVoice' exists
     if (NativeModules.Voice) setVoiceModuleExists('Voice');
     else if (NativeModules.RCTVoice) setVoiceModuleExists('RCTVoice');
@@ -69,10 +69,10 @@ export default function VoiceTestScreen({ navigation }: any) {
           return;
         }
       }
-      
+
       setRecognizedText('');
       setError('');
-      
+
       console.log('Voice instance:', Voice);
       console.log('NativeModules.Voice:', NativeModules.Voice);
       console.log('NativeModules.RCTVoice:', NativeModules.RCTVoice);
@@ -122,8 +122,8 @@ export default function VoiceTestScreen({ navigation }: any) {
       </ScrollView>
 
       <View style={styles.footer}>
-        <TouchableOpacity 
-          style={[styles.micBtn, isListening && styles.micBtnActive]} 
+        <TouchableOpacity
+          style={[styles.micBtn, isListening && styles.micBtnActive]}
           onPress={isListening ? stopListening : startListening}
         >
           <LinearGradient

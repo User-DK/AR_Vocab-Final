@@ -13,9 +13,11 @@ import {
 import { useIsFocused } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Sound from 'react-native-sound';
+import Tts from 'react-native-tts';
 import LinearGradient from 'react-native-linear-gradient';
 import ARModelViewer from '../components/ARModelViewer';
 import { getSoundAsset } from '../utils/assetLoader';
+import { speechAssessmentEngine } from '../utils/speechAssessment';
 import {
   colors,
   typography,
@@ -80,7 +82,8 @@ export default function ARLearningScreen({
   const { category: categoryId, difficulty = 'easy' } = route.params; // Support level filtering
   const isFocused = useIsFocused();
   const [currentItemIndex, setCurrentItemIndex] = useState(0);
-  const [sound, setSound] = useState<Sound | null>(null);
+  // Use a ref for the active Sound so cleanup always sees the latest instance
+  const soundRef = useRef<Sound | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showSparkle, setShowSparkle] = useState(false);
   const [vocabularyData, setVocabularyData] = useState<VocabularyData>(
@@ -94,15 +97,11 @@ export default function ARLearningScreen({
 
   useEffect(() => {
     loadVocabularyData();
-
-    // Enable playback in silence mode (iOS)
-    Sound.setCategory('Playback');
-
+    Sound.setCategory('PlayAndRecord', true);
     return () => {
-      // Cleanup sound on unmount
-      if (sound) {
-        sound.release();
-      }
+      // Release sound on unmount using ref for reliable access
+      soundRef.current?.release();
+      soundRef.current = null;
     };
   }, []);
 
@@ -173,10 +172,10 @@ export default function ARLearningScreen({
     '4. Found category data:',
     categoryData
       ? {
-          id: categoryData.id,
-          name: categoryData.name,
-          itemCount: categoryData.items?.length,
-        }
+        id: categoryData.id,
+        name: categoryData.name,
+        itemCount: categoryData.items?.length,
+      }
       : 'No matching category',
   );
 
@@ -237,94 +236,57 @@ export default function ARLearningScreen({
 
   const playSound = async () => {
     if (!currentItem?.soundPath || isPlaying) return;
-
     try {
-      // Release previous sound if exists
-      if (sound) {
-        sound.release();
-        setSound(null);
-      }
+      // Release previous sound before creating a new one
+      soundRef.current?.stop();
+      soundRef.current?.release();
+      soundRef.current = null;
 
       setIsPlaying(true);
       console.log('🔊 Playing sound for:', currentItem.word);
-      console.log('🔊 Sound path from JSON:', currentItem.soundPath);
 
-      /**
-       * PROPER SOUND LOADING FOR REACT-NATIVE-SOUND
-       *
-       * Uses require() to ensure Metro bundler includes the asset.
-       * The assetLoader utility maps JSON string paths to proper require() calls.
-       */
-
-      // Check if sound path exists
-      if (!currentItem.soundPath) {
-        console.warn(`⚠️ No sound path for: ${currentItem.word}`);
-        setIsPlaying(false);
-        return;
-      }
-
-      // For Android, react-native-sound loads from res/raw folder
-      // Files need to be lowercase with underscores only, no extension needed
-      // vocabulary-data.json has: "sounds/Lion.mp3" or "sounds/lion.mp3"
-      // Convert to raw resource name: "lion" (lowercase, no extension)
       let rawName = currentItem.soundPath
-        .replace(/^sounds\//, '') // Remove "sounds/" prefix
-        .replace(/\.mp3$/i, '') // Remove .mp3 extension
-        .toLowerCase() // Convert to lowercase
-        .replace(/-/g, '_') // Replace hyphens with underscores
-        .replace(/\s+/g, '_'); // Replace spaces with underscores
+        .replace(/^sounds\//, '')
+        .replace(/\.mp3$/i, '')
+        .toLowerCase()
+        .replace(/-/g, '_')
+        .replace(/\s+/g, '_');
 
       console.log('✅ Loading sound from raw:', rawName);
-      console.log('   Original path:', currentItem.soundPath);
 
-      // On Android, pass empty string as basePath to load from res/raw
-      // The file should be at: android/app/src/main/res/raw/{rawName}.mp3
-      const soundFile = new Sound(
-        rawName + '.mp3',
-        Sound.MAIN_BUNDLE,
-        error => {
-          if (error) {
-            console.error('❌ Failed to load sound:', error);
-            Alert.alert(
-              'Audio Error',
-              `Failed to load sound for "${currentItem.word}". Please try again.`,
-            );
-            setIsPlaying(false);
-            return;
+      const soundFile = new Sound(rawName + '.mp3', Sound.MAIN_BUNDLE, error => {
+        if (error) {
+          console.error('❌ Failed to load sound:', error);
+          console.log('🔄 Falling back to TTS...');
+          Tts.speak(currentItem.word);
+          setIsPlaying(false);
+          return;
+        }
+
+        soundRef.current = soundFile;
+        soundFile.play(success => {
+          if (success) {
+            console.log('✅ Sound played successfully');
+            triggerSparkle();
+            speechAssessmentEngine.recordLearning(currentItem.word);
+          } else {
+            console.log('⚠️ Sound playback failed');
           }
-
-          console.log('✅ Sound file loaded successfully');
-          console.log('Duration:', soundFile.getDuration(), 'seconds');
-
-          // Play the sound
-          soundFile.play(success => {
-            if (success) {
-              console.log('✅ Sound played successfully');
-              triggerSparkle();
-            } else {
-              console.log('⚠️ Sound playback failed');
-            }
-            setIsPlaying(false);
-          });
-
-          setSound(soundFile);
-        },
-      );
+          setIsPlaying(false);
+        });
+      });
     } catch (error) {
       console.error('Error playing sound:', error);
-      Alert.alert('Audio Error', 'Failed to play sound. Please try again.');
       setIsPlaying(false);
     }
   };
 
   const handleNext = () => {
     // Stop current sound if playing
-    if (sound) {
-      sound.stop();
-      sound.release();
-      setSound(null);
-      setIsPlaying(false);
-    }
+    soundRef.current?.stop();
+    soundRef.current?.release();
+    soundRef.current = null;
+    setIsPlaying(false);
 
     if (currentItemIndex < activeItems.length - 1) {
       setCurrentItemIndex(currentItemIndex + 1);
@@ -338,25 +300,22 @@ export default function ARLearningScreen({
   };
 
   const handlePrevious = () => {
-    // Stop current sound if playing
-    if (sound) {
-      sound.stop();
-      sound.release();
-      setSound(null);
-      setIsPlaying(false);
-    }
+    soundRef.current?.stop();
+    soundRef.current?.release();
+    soundRef.current = null;
+    setIsPlaying(false);
 
     if (currentItemIndex > 0) {
       setCurrentItemIndex(currentItemIndex - 1);
     }
   };
 
-  // Cleanup sound when item changes
+  // Release sound when item changes
   useEffect(() => {
     return () => {
-      if (sound) {
-        sound.release();
-      }
+      soundRef.current?.stop();
+      soundRef.current?.release();
+      soundRef.current = null;
     };
   }, [currentItemIndex]);
 
@@ -452,7 +411,6 @@ export default function ARLearningScreen({
         <View style={styles.arViewerContainer}>
           {isFocused ? (
             <ARModelViewer
-              key={currentItem.id} // Force remount when item changes
               item={{
                 ...currentItem,
                 scale: currentItem.scale as [number, number, number],
@@ -461,12 +419,11 @@ export default function ARLearningScreen({
                 difficulty: currentItem.difficulty as 'easy' | 'medium' | 'hard',
               }}
               onModelLoaded={() => console.log('Model loaded:', currentItem.word)}
-              onModelTapped={playSound}
             />
           ) : (
-             <View style={styles.placeholder}>
-               <Text style={styles.emoji}>{currentItem.emoji}</Text>
-             </View>
+            <View style={styles.placeholder}>
+              <Text style={styles.emoji}>{currentItem.emoji}</Text>
+            </View>
           )}
         </View>
 
@@ -495,7 +452,7 @@ export default function ARLearningScreen({
       {/* Word Info Card - Discovery Mode (No Text) */}
       <View style={[styles.wordInfoCard, { alignItems: 'center', justifyContent: 'center' }]}>
         <View style={styles.wordInfo}>
-          <Text style={styles.instructionText}>Tap the object to hear its name</Text>
+          <Text style={styles.instructionText}>Drag · Pinch to zoom · Twist to rotate</Text>
           {/* Word text is hidden in Learning mode to encourage listening */}
         </View>
 

@@ -9,22 +9,26 @@ import {
   Modal,
   Alert,
   ActivityIndicator,
+  Platform,
+  PermissionsAndroid,
 } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Sound from 'react-native-sound';
+import Tts from 'react-native-tts';
+import Voice from '@dev-amirzubair/react-native-voice';
 import ARModelViewer from '../components/ARModelViewer';
 import {
   speechAssessmentEngine,
   PronunciationResult,
 } from '../utils/speechAssessment';
-import { 
-  colors, 
-  borderRadius, 
-  shadows, 
-  spacing 
+import {
+  colors,
+  borderRadius,
+  shadows,
+  spacing
 } from '../styles/constants';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -50,8 +54,8 @@ export default function SpeechAssessmentScreen({ navigation, route }: any) {
   useEffect(() => {
     isMounted.current = true;
     loadData();
-    Sound.setCategory('Playback');
-    
+    Sound.setCategory('PlayAndRecord', true);
+
     Animated.loop(
       Animated.sequence([
         Animated.timing(floatingAnimation, { toValue: 1, duration: 2000, useNativeDriver: true }),
@@ -68,7 +72,10 @@ export default function SpeechAssessmentScreen({ navigation, route }: any) {
 
     return () => {
       isMounted.current = false;
-      speechAssessmentEngine.cleanup();
+      // Don't call speechAssessmentEngine.cleanup() because it calls Voice.destroy()
+      // Instead, just remove the listeners we set up if needed, or leave them for next time
+      // The singleton will re-attach them in startAssessment(anyway)
+      Voice.removeAllListeners();
     };
   }, []);
 
@@ -79,6 +86,28 @@ export default function SpeechAssessmentScreen({ navigation, route }: any) {
       const prog = await speechAssessmentEngine.getProgress();
       setSavedStats(prog);
     } catch (e) { Alert.alert('Error', 'Failed to load data'); }
+  };
+
+  const requestMicrophonePermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
+          {
+            title: 'Microphone Permission',
+            message: 'AR Vocab needs access to your microphone to assess your pronunciation.',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+          }
+        );
+        return granted === PermissionsAndroid.RESULTS.GRANTED;
+      } catch (err) {
+        console.warn('[SpeechAssessment] Permission request error:', err);
+        return false;
+      }
+    }
+    return true;
   };
 
   const categoryData = vocabularyData?.categories.find((c: any) => c.id.toLowerCase() === category.toLowerCase());
@@ -93,7 +122,12 @@ export default function SpeechAssessmentScreen({ navigation, route }: any) {
     setIsPlayingRef(true);
     let rawName = currentItem.soundPath.split('/').pop().replace('.mp3', '').toLowerCase();
     const sound = new Sound(`${rawName}.mp3`, Sound.MAIN_BUNDLE, (e) => {
-      if (e) return setIsPlayingRef(false);
+      if (e) {
+        console.log('🔄 Sound file not found, using TTS for:', currentItem.word);
+        Tts.speak(currentItem.word);
+        setIsPlayingRef(false);
+        return;
+      }
       sound.play(() => {
         setIsPlayingRef(false);
         sound.release();
@@ -106,7 +140,7 @@ export default function SpeechAssessmentScreen({ navigation, route }: any) {
       setIsRecording(false);
       setIsProcessing(true);
       const result = await speechAssessmentEngine.stopAssessment(category, difficulty);
-      
+
       if (isMounted.current) {
         setIsProcessing(false);
         if (result) {
@@ -118,9 +152,24 @@ export default function SpeechAssessmentScreen({ navigation, route }: any) {
         }
       }
     } else {
+      const hasPermission = await requestMicrophonePermission();
+      if (!hasPermission) {
+        Alert.alert('Permission Denied', 'Microphone access is required for pronunciation practice.');
+        return;
+      }
+
       setIsRecording(true);
       setShowFeedback(false);
-      await speechAssessmentEngine.startAssessment(currentItem.word);
+      try {
+        if (!currentItem || !currentItem.word) {
+          throw new Error('No word selected');
+        }
+        await speechAssessmentEngine.startAssessment(currentItem.word);
+      } catch (error: any) {
+        console.error('Failed to start assessment:', error);
+        setIsRecording(false);
+        Alert.alert('Error', `Could not start voice recognition: ${error.message || 'Please try again.'}`);
+      }
     }
   };
 
@@ -136,31 +185,31 @@ export default function SpeechAssessmentScreen({ navigation, route }: any) {
   const renderMasteryStar = (isMastered: boolean) => {
     return (
       <View style={styles.masteryContainer}>
-        <Icon 
-          name={isMastered ? "star" : "star-outline"} 
-          size={28} 
-          color={isMastered ? "#FBBF24" : "rgba(0,0,0,0.1)"} 
+        <Icon
+          name={isMastered ? "star" : "star-outline"}
+          size={28}
+          color={isMastered ? "#FBBF24" : "rgba(0,0,0,0.1)"}
         />
         {isMastered && <Text style={styles.masteryText}>Mastered!</Text>}
       </View>
     );
   };
 
-  if (!currentItem) return <ActivityIndicator style={{flex: 1}} />;
+  if (!currentItem) return <ActivityIndicator style={{ flex: 1 }} />;
 
   return (
     <View style={styles.container}>
       <LinearGradient colors={['#1F2937', '#374151', '#4B5563']} style={styles.backgroundGradient} />
-      
+
       <Animated.View style={[styles.gridOverlay, { opacity: gridOpacity }]}>
         {Array.from({ length: 20 }).map((_, i) => <View key={`h-${i}`} style={[styles.gridLine, { top: i * 40 }]} />)}
         {Array.from({ length: 20 }).map((_, i) => <View key={`v-${i}`} style={[styles.gridLineVertical, { left: i * 40 }]} />)}
       </Animated.View>
 
       {isFocused ? (
-        <ARModelViewer key={currentItem.id} item={currentItem} />
+        <ARModelViewer item={currentItem} />
       ) : (
-        <View style={styles.placeholder}><Text style={{fontSize: 80}}>{currentItem.emoji}</Text></View>
+        <View style={styles.placeholder}><Text style={{ fontSize: 80 }}>{currentItem.emoji}</Text></View>
       )}
 
       <SafeAreaView style={styles.safeArea}>
@@ -172,17 +221,17 @@ export default function SpeechAssessmentScreen({ navigation, route }: any) {
             <Text style={styles.headerTitle}>LV {difficulty === 'easy' ? '1' : difficulty === 'medium' ? '2' : '3'}</Text>
             <Text style={styles.headerSubtitle}>{currentIndex + 1} of {items.length}</Text>
           </View>
-          <View style={{width: 44}} />
+          <View style={{ width: 44 }} />
         </View>
       </SafeAreaView>
 
       <View style={StyleSheet.absoluteFill} pointerEvents="box-none">
-        <Animated.View style={[styles.wordInfoCard, { 
+        <Animated.View style={[styles.wordInfoCard, {
           transform: [{ translateY: floatingAnimation.interpolate({ inputRange: [0, 1], outputRange: [0, -10] }) }]
         }]}>
           <View style={styles.cardHeader}>
-             {renderMasteryStar(currentItemProgress.stars === 1)}
-             {currentItemProgress.bestScore > 0 && <Text style={styles.bestScoreText}>Best: {currentItemProgress.bestScore}%</Text>}
+            {renderMasteryStar(currentItemProgress.stars === 1)}
+            {currentItemProgress.bestScore > 0 && <Text style={styles.bestScoreText}>Best: {currentItemProgress.bestScore}%</Text>}
           </View>
 
           <View style={styles.wordInfo}>
@@ -192,26 +241,26 @@ export default function SpeechAssessmentScreen({ navigation, route }: any) {
 
           <View style={styles.controls}>
             <TouchableOpacity onPress={playReference} style={styles.controlButton}>
-               <LinearGradient colors={['#6366F1', '#4F46E5']} style={styles.buttonGradient}>
-                 <Icon name={isPlayingRef ? "volume-high" : "volume-medium"} size={26} color="white" />
-                 <Text style={styles.buttonText}>Listen</Text>
-               </LinearGradient>
+              <LinearGradient colors={['#6366F1', '#4F46E5']} style={styles.buttonGradient}>
+                <Icon name={isPlayingRef ? "volume-high" : "volume-medium"} size={26} color="white" />
+                <Text style={styles.buttonText}>Listen</Text>
+              </LinearGradient>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={toggleRecording} style={styles.micButton}>
-               <LinearGradient colors={isRecording ? ['#EF4444', '#B91C1C'] : ['#10B981', '#059669']} style={styles.micGradient}>
-                 <Icon name={isRecording ? "stop" : "mic"} size={32} color="white" />
-               </LinearGradient>
+              <LinearGradient colors={isRecording ? ['#EF4444', '#B91C1C'] : ['#10B981', '#059669']} style={styles.micGradient}>
+                <Icon name={isRecording ? "stop" : "mic"} size={32} color="white" />
+              </LinearGradient>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={handleNext} style={styles.controlButton}>
-               <LinearGradient colors={['#10b981', '#059669']} style={styles.buttonGradient}>
-                 <Icon name="play-skip-forward" size={26} color="white" />
-                 <Text style={styles.buttonText}>Next</Text>
-               </LinearGradient>
+              <LinearGradient colors={['#10b981', '#059669']} style={styles.buttonGradient}>
+                <Icon name="play-skip-forward" size={26} color="white" />
+                <Text style={styles.buttonText}>Next</Text>
+              </LinearGradient>
             </TouchableOpacity>
           </View>
-          
+
           {isRecording && (
             <View style={styles.waveform}>
               {waveAnims.map((anim, i) => (

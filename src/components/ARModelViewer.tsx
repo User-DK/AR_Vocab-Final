@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import {
   View,
   StyleSheet,
@@ -30,6 +30,7 @@ import {
   ViroARTrackingTargets,
   ViroBox,
   ViroMaterials,
+  ViroText,
 } from '@reactvision/react-viro';
 
 interface ARModelViewerProps {
@@ -37,6 +38,25 @@ interface ARModelViewerProps {
   onModelLoaded?: () => void;
   onModelTapped?: () => void;
 }
+
+// ─────────────────────────────────────────────────────────────
+// Module-level one-time setup: animations & static materials
+// Running these inside a component causes them to re-execute on
+// every ViroARSceneNavigator remount — burning GPU memory.
+// ─────────────────────────────────────────────────────────────
+try {
+  ViroAnimations.registerAnimations({
+    rotate:    { properties: { rotateY: '+=360' }, duration: 5000, easing: 'Linear' },
+    scaleUp:   { properties: { scaleX: 1.2, scaleY: 1.2, scaleZ: 1.2 }, duration: 200, easing: 'EaseOut' },
+    scaleDown: { properties: { scaleX: 1.0, scaleY: 1.0, scaleZ: 1.0 }, duration: 200, easing: 'EaseIn' },
+    float:     { properties: { positionY: '+=0.1' }, duration: 1000, easing: 'EaseInOut' },
+  });
+  ViroMaterials.createMaterials({
+    fallbackMaterial: { lightingModel: 'Blinn', diffuseColor: '#FF6B6B', shininess: 2.0 },
+    shadowMaterial:   { lightingModel: 'Blinn', diffuseColor: '#000000', shininess: 0.0 },
+    letterMaterial:   { lightingModel: 'Blinn', diffuseColor: '#3b82f6', shininess: 0.5 },
+  });
+} catch (_) { /* already registered on hot-reload */ }
 
 /**
  * Real AR Implementation using ViroReact
@@ -105,6 +125,20 @@ export const ARModelViewer: React.FC<ARModelViewerProps> = ({
     }
   };
 
+  // ALL hooks must be declared before any conditional return (Rules of Hooks)
+  // Stable callbacks so viroAppProps reference only changes when item changes
+  const handleTracking = useCallback(() => setTrackingInitialized(true), []);
+  const handlePlaced   = useCallback((placed: boolean) => setModelPlaced(placed), []);
+
+  // viroAppProps passes live data INTO the persistent Viro scene without remounting
+  const viroAppProps = useMemo(() => ({
+    item,
+    onModelLoaded,
+    onModelTapped,
+    onTrackingInitialized: handleTracking,
+    onModelPlaced: handlePlaced,
+  }), [item, onModelLoaded, onModelTapped, handleTracking, handlePlaced]);
+
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
@@ -122,17 +156,8 @@ export const ARModelViewer: React.FC<ARModelViewerProps> = ({
     <View style={styles.arScene}>
       <ViroARSceneNavigator
         autofocus={true}
-        initialScene={{
-          scene: () => (
-            <ARSceneComponent
-              item={item}
-              onModelLoaded={onModelLoaded}
-              onModelTapped={onModelTapped}
-              onTrackingInitialized={() => setTrackingInitialized(true)}
-              onModelPlaced={placed => setModelPlaced(placed)}
-            />
-          ),
-        }}
+        viroAppProps={viroAppProps}
+        initialScene={{ scene: ARSceneComponent }}
         style={styles.viroContainer}
       />
 
@@ -150,7 +175,7 @@ export const ARModelViewer: React.FC<ARModelViewerProps> = ({
           <View style={styles.instructionBadge}>
             <Icon name="cube-outline" size={20} color="#ffffff" />
             <Text style={styles.instructionText}>
-              Viewing {item.word} in AR
+              {item.word} · Drag · Pinch=Zoom · Twist=Rotate
             </Text>
           </View>
         </View>
@@ -160,26 +185,35 @@ export const ARModelViewer: React.FC<ARModelViewerProps> = ({
 };
 
 /**
- * AR Scene Component with 3D Model Loading
+ * AR Scene Component — receives live data via sceneNavigator.viroAppProps
+ * so the ViroARSceneNavigator never needs to remount between words.
  */
-interface ARSceneComponentProps {
-  item: VocabularyItem;
-  onModelLoaded?: () => void;
-  onModelTapped?: () => void;
-  onTrackingInitialized: () => void;
-  onModelPlaced: (placed: boolean) => void;
-}
-
-const ARSceneComponent: React.FC<ARSceneComponentProps> = ({
-  item,
-  onModelLoaded,
-  onModelTapped,
-  onTrackingInitialized,
-  onModelPlaced,
-}) => {
+const ARSceneComponent = ({ sceneNavigator }: any) => {
+  const {
+    item,
+    onModelLoaded,
+    onModelTapped,
+    onTrackingInitialized,
+    onModelPlaced,
+  } = sceneNavigator.viroAppProps as {
+    item: VocabularyItem;
+    onModelLoaded?: () => void;
+    onModelTapped?: () => void;
+    onTrackingInitialized: () => void;
+    onModelPlaced: (placed: boolean) => void;
+  };
   const [modelPlaced, setModelPlaced] = useState(true); // Auto-place model
   const [modelPosition, setModelPosition] = useState([0, -0.5, -1.5]); // Fixed position in front of camera
   const [modelLoadError, setModelLoadError] = useState(false);
+  // Pinch-to-zoom: track current scale multiplier (1.0 = original item.scale)
+  const [modelScale, setModelScale] = useState(1.0);
+  // Touch-based rotation: [X, Y, Z] in degrees — user-controlled via two-finger twist
+  const [modelRotation, setModelRotation] = useState<[number, number, number]>(
+    item.rotation as [number, number, number]
+  );
+  // Ref stores the Y rotation at the moment a rotate gesture starts,
+  // so we can add deltas smoothly without stale-closure drift.
+  const rotStartY = useRef(0);
 
   // Get model type using utility function
   const modelFileType = getModelType(item.modelPath);
@@ -188,11 +222,13 @@ const ARSceneComponent: React.FC<ARSceneComponentProps> = ({
   useEffect(() => {
     console.log('🔄 Item changed, auto-placing AR model for:', item.word);
     setModelPlaced(true);
-    setModelPosition([0, -0.5, -1.5]); // Position in front of camera
+    setModelPosition([0, -0.5, -1.5]);
     setModelLoadError(false);
+    setModelScale(1.0);  // Reset zoom
+    setModelRotation(item.rotation as [number, number, number]); // Reset rotation
     onModelPlaced(true);
-    onTrackingInitialized(); // Immediately mark as initialized
-  }, [item.id, item.word, onModelPlaced, onTrackingInitialized]);
+    onTrackingInitialized();
+  }, [item.id, item.word, item.rotation, onModelPlaced, onTrackingInitialized]);
 
   const handleModelLoad = useCallback(() => {
     console.log(
@@ -244,58 +280,19 @@ const ARSceneComponent: React.FC<ARSceneComponentProps> = ({
     onModelTapped?.();
   }, [item.word, onModelTapped]);
 
-  // Register animations
+  // Update only the per-item letterMaterial when textureColor changes.
+  // Animations & static materials are registered once at module level above.
   useEffect(() => {
-    // Register ViroReact animations
-    ViroAnimations.registerAnimations({
-      rotate: {
-        properties: {
-          rotateY: '+=360',
+    try {
+      ViroMaterials.createMaterials({
+        letterMaterial: {
+          lightingModel: 'Blinn',
+          diffuseColor: item.textureColor || '#3b82f6',
+          shininess: 0.5,
         },
-        duration: 5000,
-        easing: 'Linear',
-      },
-      scaleUp: {
-        properties: {
-          scaleX: 1.2,
-          scaleY: 1.2,
-          scaleZ: 1.2,
-        },
-        duration: 200,
-        easing: 'EaseOut',
-      },
-      scaleDown: {
-        properties: {
-          scaleX: 1.0,
-          scaleY: 1.0,
-          scaleZ: 1.0,
-        },
-        duration: 200,
-        easing: 'EaseIn',
-      },
-      float: {
-        properties: {
-          positionY: '+=0.1',
-        },
-        duration: 1000,
-        easing: 'EaseInOut',
-      },
-    });
-
-    // Register ViroReact materials
-    ViroMaterials.createMaterials({
-      fallbackMaterial: {
-        lightingModel: 'Blinn',
-        diffuseColor: '#FF6B6B',
-        shininess: 2.0,
-      },
-      shadowMaterial: {
-        lightingModel: 'Blinn',
-        diffuseColor: '#000000',
-        shininess: 0.0,
-      },
-    });
-  }, []);
+      });
+    } catch (_) {}
+  }, [item.textureColor]);
 
   const getModelSource = () => {
     /**
@@ -373,34 +370,97 @@ const ARSceneComponent: React.FC<ARSceneComponentProps> = ({
         <ViroNode
           position={modelPosition as [number, number, number]}
           dragType="FixedToWorld"
-          onDrag={() => {}}
+          onDrag={(dragToPos: number[]) => { setModelPosition(dragToPos); }}
+          onPinch={(pinchState: number, scaleFactor: number, _source: any) => {
+            // Clamp scale between 0.3x and 5x of the original item scale
+            if (pinchState === 3) {
+              setModelScale(prev => Math.min(Math.max(prev * scaleFactor, 0.3), 5.0));
+            }
+          }}
+          onRotate={(rotateState: number, rotationFactor: number, _source: any) => {
+            // rotateState 1=start, 2=ongoing, 3=end
+            // rotationFactor is the cumulative angle in degrees since gesture start
+            if (rotateState === 1) {
+              // Snapshot current Y angle so we can add the delta cleanly
+              rotStartY.current = modelRotation[1];
+            } else if (rotateState === 2) {
+              // Update live during the gesture for smooth visual feedback
+              setModelRotation([
+                modelRotation[0],
+                rotStartY.current - rotationFactor, // negative: screen twist → world Y
+                modelRotation[2],
+              ]);
+            }
+            // state=3 (end): no extra update needed — state=2 already applied final value
+          }}
         >
-          {!modelLoadError ? (
-            <>
-              {/* Load 3D Model - Supports GLB, GLTF, and OBJ */}
-              <Viro3DObject
-                source={getModelSource()}
-                resources={getResourcesForOBJ()}
+          {item.modelPath === 'internal:cube' ? (
+            // Letter cube — user-rotated via modelRotation
+            <ViroNode position={[0, 0, 0]} rotation={modelRotation}>
+              <ViroBox
                 position={[0, 0, 0]}
-                scale={item.scale}
-                rotation={item.rotation}
-                type={modelFileType}
-                materials={
-                  modelFileType === 'OBJ' ? [item.textureColor] : undefined
-                }
-                onLoadStart={() => {
-                  console.log(
-                    `⏳ Starting to load ${modelFileType} model: ${item.word}`,
-                  );
-                }}
-                onLoadEnd={handleModelLoad}
-                onError={handleModelError}
+                scale={[
+                  0.5 * modelScale,
+                  0.5 * modelScale,
+                  0.5 * modelScale,
+                ]}
+                materials={['letterMaterial']}
                 onClick={handleModelTap}
-                lightReceivingBitMask={1}
-                shadowCastingBitMask={1}
-                animation={{ name: 'rotate', run: true, loop: true }}
+                physicsBody={{ type: 'Static' } as any}
               />
-            </>
+              <ViroText
+                text={item.word}
+                position={[0, 0, 0.26 * modelScale]}
+                width={1}
+                height={1}
+                style={{
+                  fontFamily: 'Arial',
+                  fontSize: 50,
+                  fontWeight: 'bold',
+                  color: '#ffffff',
+                  textAlign: 'center',
+                  textAlignVertical: 'center',
+                }}
+              />
+              <ViroText
+                text={item.word}
+                position={[0, 0, -0.26 * modelScale]}
+                rotation={[0, 180, 0]}
+                width={1}
+                height={1}
+                style={{
+                  fontFamily: 'Arial',
+                  fontSize: 50,
+                  fontWeight: 'bold',
+                  color: '#ffffff',
+                  textAlign: 'center',
+                  textAlignVertical: 'center',
+                }}
+              />
+            </ViroNode>
+          ) : !modelLoadError ? (
+            // 3D object — rotation driven by modelRotation (user-controlled)
+            <Viro3DObject
+              source={getModelSource() as any}
+              resources={getResourcesForOBJ()}
+              position={[0, 0, 0]}
+              scale={item.scale.map((s: number) => s * modelScale) as [number, number, number]}
+              rotation={modelRotation}
+              type={modelFileType}
+              materials={
+                modelFileType === 'OBJ' ? [item.textureColor] : undefined
+              }
+              onLoadStart={() => {
+                console.log(
+                  `⏳ Starting to load ${modelFileType} model: ${item.word}`,
+                );
+              }}
+              onLoadEnd={handleModelLoad}
+              onError={handleModelError}
+              onClick={handleModelTap}
+              lightReceivingBitMask={1}
+              shadowCastingBitMask={1}
+            />
           ) : (
             // Fallback: Show emoji if model fails to load
             <ViroNode position={[0, 0, 0]}>

@@ -15,7 +15,7 @@ import { NavigationProps } from '../types/navigation';
 import Card from '../components/Card';
 import Badge from '../components/Badge';
 import Progress from '../components/Progress';
-import { speechAssessmentEngine, UserProgress } from '../utils/speechAssessment';
+import { speechAssessmentEngine, overallAnalytics } from '../utils/speechAssessment';
 import {
   colors,
   typography,
@@ -28,7 +28,8 @@ import {
 
 export default function HomeScreen({ navigation }: NavigationProps) {
   const isFocused = useIsFocused();
-  const [stats, setStats] = useState<UserProgress | null>(null);
+  const [analytics, setAnalytics] = useState<overallAnalytics | null>(null);
+  const [stars, setStars] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
@@ -38,8 +39,10 @@ export default function HomeScreen({ navigation }: NavigationProps) {
   }, [isFocused]);
 
   const loadStats = async () => {
-    const data = await speechAssessmentEngine.getProgress();
-    setStats(data);
+    const data = await speechAssessmentEngine.getAnalytics();
+    const progress = await speechAssessmentEngine.getProgress();
+    setAnalytics(data);
+    setStars(progress.totalStars || 0);
   };
 
   const onRefresh = async () => {
@@ -48,11 +51,10 @@ export default function HomeScreen({ navigation }: NavigationProps) {
     setRefreshing(false);
   };
 
-  const badgeDisplay = stats?.badges?.map(b => {
-    const [cat, diff] = b.split('_');
-    const emoji = cat === 'animals' ? '🦁' : cat === 'foods' ? '🍎' : '📦';
-    return `${emoji} ${cat.charAt(0).toUpperCase() + cat.slice(1)} ${diff.toUpperCase()}`;
-  }) || [];
+  const badgeDisplay = analytics?.categories.filter(c => c.percentage === 100).map(cat => ({
+    name: cat.name,
+    id: cat.id
+  })) || [];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -78,82 +80,77 @@ export default function HomeScreen({ navigation }: NavigationProps) {
 
           {/* Stats Card */}
           <Card style={styles.statsCard} elevated={true}>
+            <View style={styles.dashboardHeader}>
+              <Text style={styles.dashboardTitle}>Learning Overview</Text>
+            </View>
             <View style={styles.statsGrid}>
               <View style={styles.statItem}>
                 <LinearGradient colors={colors.gradients.yellow} style={styles.statIcon}>
                   <Icon name="star" size={24} color="white" />
                 </LinearGradient>
-                <Text style={styles.statValue}>{stats?.totalStars || 0}</Text>
+                <Text style={styles.statValue}>{stars}</Text>
                 <Text style={styles.statLabel}>Total Stars</Text>
               </View>
               <View style={styles.statItem}>
                 <LinearGradient colors={colors.gradients.purple} style={styles.statIcon}>
-                  <Icon name="trophy" size={24} color="white" />
+                  <Icon name="medal" size={24} color="white" />
                 </LinearGradient>
-                <Text style={styles.statValue}>{stats?.badges.length || 0}</Text>
+                <Text style={styles.statValue}>{analytics?.categories.length || 0}</Text>
                 <Text style={styles.statLabel}>Badges</Text>
               </View>
               <View style={styles.statItem}>
                 <LinearGradient colors={colors.gradients.green} style={styles.statIcon}>
-                  <Icon name="sparkles" size={24} color="white" />
+                  <Icon name="rocket" size={24} color="white" />
                 </LinearGradient>
-                <Text style={styles.statValue}>{Object.keys(stats?.items || {}).length}</Text>
-                <Text style={styles.statLabel}>Vocabulary</Text>
+                <Text style={styles.statValue}>{analytics?.totalLearned || 0}</Text>
+                <Text style={styles.statLabel}>Learned</Text>
               </View>
+            </View>
+
+            {/* Daily Streak / Goal placeholder */}
+            <View style={styles.goalSection}>
+              <View style={styles.goalInfo}>
+                <Text style={styles.goalText}>Daily Learning Goal</Text>
+                <Text style={styles.goalPercent}>{Math.min(100, Math.round((stars / 50) * 100))}% complete</Text>
+              </View>
+              <Progress value={Math.min(100, (stars / 50) * 100)} height={8} />
             </View>
 
             {/* Badges Display */}
             <View style={styles.badgeLabelRow}>
               <Text style={styles.sectionHeader}>Your Collection</Text>
-              {stats?.badges.length === 0 && <Text style={styles.emptyNote}>Complete a level with 100% to earn badges!</Text>}
+              {(!analytics || analytics.totalLearned === 0) && <Text style={styles.emptyNote}>Start learning to earn badges!</Text>}
             </View>
-            
+
             <View style={styles.badgeContainer}>
-              {badgeDisplay.map((badge, idx) => (
+              {analytics?.categories.filter(c => c.percentage === 100).map((cat, idx) => (
                 <Badge key={idx} variant="gradient" gradient={[...colors.gradients.yellow]}>
-                  🏆 {badge}
+                  🏆 {cat.name}
                 </Badge>
               ))}
+              {analytics && analytics.averageAccuracy >= 85 && (
+                <Badge variant="gradient" gradient={[...colors.gradients.green]}>
+                  🎯 Ace
+                </Badge>
+              )}
             </View>
           </Card>
 
-          {/* Main Navigation Buttons */}
-          <View style={styles.navigationGrid}>
-            <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Categories', { initialMode: 'learning' })}>
-              <LinearGradient colors={colors.gradients.blue} style={styles.navButtonGradient}>
-                <Icon name="book-outline" size={32} color="white" />
-                <Text style={styles.navButtonText}>Learn</Text>
-              </LinearGradient>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.navButton} onPress={() => navigation.navigate('Categories', { initialMode: 'practice' })}>
-              <LinearGradient colors={colors.gradients.green} style={styles.navButtonGradient}>
-                <Icon name="mic-outline" size={32} color="white" />
-                <Text style={styles.navButtonText}>Practice</Text>
-              </LinearGradient>
-            </TouchableOpacity>
+          <View style={styles.quickStartHeader}>
+            <Text style={styles.dashboardTitle}>Quick Stats</Text>
           </View>
-          
-          <TouchableOpacity style={[styles.navButton, { width: '100%' }]} onPress={() => navigation.navigate('Progress')}>
-            <LinearGradient colors={colors.gradients.purple} style={styles.fullWidthGradient}>
-              <Icon name="analytics-outline" size={28} color="white" />
-              <Text style={styles.navButtonTextInline}>View Learning History</Text>
-            </LinearGradient>
-          </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.navButton, { width: '100%', marginTop: 10 }]} onPress={() => navigation.navigate('Help')}>
-            <LinearGradient colors={['#374151', '#111827']} style={styles.fullWidthGradient}>
-              <Icon name="help-buoy-outline" size={28} color="white" />
-              <Text style={styles.navButtonTextInline}>App Guide & Help</Text>
-            </LinearGradient>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={[styles.navButton, { width: '100%', marginTop: 10, marginBottom: 20 }]} onPress={() => navigation.navigate('Settings')}>
-            <LinearGradient colors={['#4B5563', '#374151']} style={styles.fullWidthGradient}>
-              <Icon name="settings-outline" size={28} color="white" />
-              <Text style={styles.navButtonTextInline}>App Settings</Text>
-            </LinearGradient>
-          </TouchableOpacity>
+          <Card style={styles.miniStatsRow}>
+            <View style={styles.miniStatItem}>
+              <Text style={styles.miniStatVal}>{analytics?.averageAccuracy || 0}%</Text>
+              <Text style={styles.miniStatLabel}>Avg. Clarity</Text>
+            </View>
+            <View style={styles.verticalDivider} />
+            <View style={styles.miniStatItem}>
+              <Text style={styles.miniStatVal}>{analytics?.categories.length || 0}</Text>
+              <Text style={styles.miniStatLabel}>Topics</Text>
+            </View>
+          </Card>
 
         </ScrollView>
       </LinearGradient>
@@ -176,15 +173,27 @@ const styles = StyleSheet.create({
   headerActions: { flexDirection: 'row', gap: 10, paddingRight: 45, marginRight: 45 },
   iconButton: { width: 44, height: 44, borderRadius: 22, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center', ...shadows.md },
   statsCard: { marginBottom: 20, backgroundColor: 'white', padding: 20, borderRadius: 32 },
-  statsGrid: { flexDirection: 'row', justifyContent: 'space-around', marginBottom: 25 },
+  dashboardHeader: { marginBottom: 15 },
+  dashboardTitle: { fontSize: 18, fontWeight: 'bold', color: colors.slate[800] },
+  statsGrid: { flexDirection: 'row', justifyContent: 'space-around', marginBottom: 20 },
   statItem: { alignItems: 'center' },
   statIcon: { width: 50, height: 50, borderRadius: 25, justifyContent: 'center', alignItems: 'center', marginBottom: 8, ...shadows.md },
   statValue: { fontSize: 18, fontWeight: 'bold', color: '#1F2937' },
   statLabel: { fontSize: 12, color: '#9CA3AF' },
+  goalSection: { marginTop: 10, marginBottom: 20, padding: 15, backgroundColor: colors.slate[50], borderRadius: 20 },
+  goalInfo: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },
+  goalText: { fontSize: 13, fontWeight: '600', color: colors.slate[600] },
+  goalPercent: { fontSize: 13, fontWeight: 'bold', color: colors.primary },
   sectionHeader: { fontSize: 16, fontWeight: 'bold', color: '#1F2937', marginBottom: 10 },
   badgeLabelRow: { marginBottom: 10 },
   emptyNote: { fontSize: 12, color: '#9CA3AF', fontStyle: 'italic' },
   badgeContainer: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+  quickStartHeader: { marginBottom: 12, marginTop: 5 },
+  miniStatsRow: { flexDirection: 'row', paddingVertical: 15, borderRadius: 24, backgroundColor: 'white' },
+  miniStatItem: { flex: 1, alignItems: 'center' },
+  miniStatVal: { fontSize: 20, fontWeight: 'bold', color: colors.slate[800] },
+  miniStatLabel: { fontSize: 11, color: colors.slate[500], marginTop: 2 },
+  verticalDivider: { width: 1, height: '70%', backgroundColor: colors.slate[100] },
   navigationGrid: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15 },
   navButton: { width: '48%' },
   navButtonGradient: { height: 130, borderRadius: 24, justifyContent: 'center', alignItems: 'center', ...shadows.md },
