@@ -251,7 +251,6 @@ export default function ClinicalReportScreen({ navigation }: NavigationProps) {
                     <Card style={styles.chartCard}>
                         <Text style={styles.cardTitle}>Phonetic Improvement Trend</Text>
                         <LineChart data={report?.improvementTrend || []} />
-                        <Text style={styles.chartFooter}>Phonetic Accuracy (%) over last 10 attempts</Text>
                     </Card>
 
                     {/* Milestone Standing */}

@@ -97,7 +97,6 @@ export default function ProgressScreen({ navigation }: NavigationProps) {
               </TouchableOpacity>
             </View>
             <LineChart data={report?.improvementTrend || []} color={colors.primary} />
-            <Text style={styles.chartLegend}>Score improvement over last 10 attempts</Text>
           </Card>
 
           {/* Overall Progress */}

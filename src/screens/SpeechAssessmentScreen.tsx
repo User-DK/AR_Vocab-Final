@@ -50,6 +50,8 @@ export default function SpeechAssessmentScreen({ navigation, route }: any) {
   const floatingAnimation = useRef(new Animated.Value(0)).current;
   const gridOpacity = useRef(new Animated.Value(0.3)).current;
   const isMounted = useRef(true);
+  const isRecordingRef = useRef(false);      // mirror of isRecording for use inside callbacks
+  const autoStopTimer = useRef<ReturnType<typeof setTimeout> | null>(null); // safety timeout
 
   useEffect(() => {
     isMounted.current = true;
@@ -72,6 +74,11 @@ export default function SpeechAssessmentScreen({ navigation, route }: any) {
 
     return () => {
       isMounted.current = false;
+      // Clear any pending auto-stop timer on unmount
+      if (autoStopTimer.current) {
+        clearTimeout(autoStopTimer.current);
+        autoStopTimer.current = null;
+      }
       // Don't call speechAssessmentEngine.cleanup() because it calls Voice.destroy()
       // Instead, just remove the listeners we set up if needed, or leave them for next time
       // The singleton will re-attach them in startAssessment(anyway)
@@ -135,22 +142,36 @@ export default function SpeechAssessmentScreen({ navigation, route }: any) {
     });
   };
 
-  const toggleRecording = async () => {
-    if (isRecording) {
-      setIsRecording(false);
-      setIsProcessing(true);
-      const result = await speechAssessmentEngine.stopAssessment(category, difficulty);
+  /** Shared stop logic — called by button press OR auto-close triggers */
+  const stopRecording = async () => {
+    if (!isRecordingRef.current) return; // guard against double-call
+    isRecordingRef.current = false;
 
-      if (isMounted.current) {
-        setIsProcessing(false);
-        if (result) {
-          setCurrentResult(result);
-          setShowFeedback(true);
-          // Refresh stats
-          const prog = await speechAssessmentEngine.getProgress();
-          setSavedStats(prog);
-        }
+    // Cancel the safety timeout if it's still pending
+    if (autoStopTimer.current) {
+      clearTimeout(autoStopTimer.current);
+      autoStopTimer.current = null;
+    }
+
+    setIsRecording(false);
+    setIsProcessing(true);
+    const result = await speechAssessmentEngine.stopAssessment(category, difficulty);
+
+    if (isMounted.current) {
+      setIsProcessing(false);
+      if (result) {
+        setCurrentResult(result);
+        setShowFeedback(true);
+        const prog = await speechAssessmentEngine.getProgress();
+        setSavedStats(prog);
       }
+    }
+  };
+
+  const toggleRecording = async () => {
+    if (isRecordingRef.current) {
+      // User manually stopped
+      await stopRecording();
     } else {
       const hasPermission = await requestMicrophonePermission();
       if (!hasPermission) {
@@ -158,6 +179,7 @@ export default function SpeechAssessmentScreen({ navigation, route }: any) {
         return;
       }
 
+      isRecordingRef.current = true;
       setIsRecording(true);
       setShowFeedback(false);
       try {
@@ -165,8 +187,29 @@ export default function SpeechAssessmentScreen({ navigation, route }: any) {
           throw new Error('No word selected');
         }
         await speechAssessmentEngine.startAssessment(currentItem.word);
+
+        // ── AUTO-CLOSE LAYER 1: Native silence detection ──────────────────────
+        // The Voice library fires onSpeechEnd when the OS detects the user
+        // has stopped speaking. We hook it here (after startAssessment sets up
+        // its own listeners) so it auto-stops without any button press.
+        const _origOnSpeechEnd = Voice.onSpeechEnd;
+        Voice.onSpeechEnd = async (e: any) => {
+          // Call the original engine handler first
+          if (_origOnSpeechEnd) _origOnSpeechEnd(e);
+          console.log('[AutoClose] onSpeechEnd triggered — stopping automatically');
+          await stopRecording();
+        };
+
+        // ── AUTO-CLOSE LAYER 2: Safety timeout (8 seconds) ───────────────────
+        // Fallback in case onSpeechEnd doesn't fire (e.g. some Android builds)
+        autoStopTimer.current = setTimeout(async () => {
+          console.log('[AutoClose] Safety timeout reached — stopping automatically');
+          await stopRecording();
+        }, 8000);
+
       } catch (error: any) {
         console.error('Failed to start assessment:', error);
+        isRecordingRef.current = false;
         setIsRecording(false);
         Alert.alert('Error', `Could not start voice recognition: ${error.message || 'Please try again.'}`);
       }
